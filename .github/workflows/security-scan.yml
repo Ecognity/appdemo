@@ -97,10 +97,6 @@ jobs:
       continue-on-error: true
       uses: microsoft/security-devops-action@v1
       with:
-        tools: |
-          trivy
-          templateanalyzer
-          credscan
         outputFormat: sarif
         outputPath: msdo-results
 
