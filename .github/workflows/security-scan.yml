@@ -1,0 +1,80 @@
+name: Security Scan
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+    # --------------------------------------------------
+    # Checkout
+    # --------------------------------------------------
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # --------------------------------------------------
+    # CODEQL (C#)
+    # --------------------------------------------------
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: csharp
+
+    - name: Run CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+
+    # --------------------------------------------------
+    # TRIVY – Filesystem Scan (SARIF)
+    # --------------------------------------------------
+    - name: Trivy Scan (Filesystem)
+      continue-on-error: true
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: fs
+        format: sarif
+        output: trivy.sarif
+
+    - name: Upload Trivy SARIF
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: trivy.sarif
+
+    # --------------------------------------------------
+    # MICROSOFT SECURITY DEVOPS (SAST)
+    # --------------------------------------------------
+    - name: Microsoft Security DevOps
+      continue-on-error: true
+      uses: microsoft/security-devops-action@v1
+
+    # --------------------------------------------------
+    # DEPENDENCY REVIEW (PR only)
+    # --------------------------------------------------
+    - name: Dependency Review
+      if: github.event_name == 'pull_request'
+      uses: actions/dependency-review-action@v4
+
+    # --------------------------------------------------
+    # SBOM (CycloneDX)
+    # --------------------------------------------------
+    - name: Generate SBOM
+      uses: CycloneDX/gh-dotnet@v1
+      with:
+        path: .
+        format: json
+
+    - name: Upload SBOM
+      uses: actions/upload-artifact@v4
+      with:
+        name: sbom
+        path: bom.json
