@@ -72,8 +72,7 @@ jobs:
         languages: csharp
 
     # 🔹 REQUIRED STEP
-    - name: Build
-      run: dotnet build --no-restore
+
 
     
 
@@ -139,6 +138,9 @@ jobs:
           /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx \
           /d:sonar.cs.opencover.reportsPaths=TestResults/**/coverage.cobertura.xml \
           /d:sonar.host.url="https://sonarcloud.io"
+
+    - name: Build
+      run: dotnet build --no-restore
 
 
     - name: Run CodeQL Analysis
