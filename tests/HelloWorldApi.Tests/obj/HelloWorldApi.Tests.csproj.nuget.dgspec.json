@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\ecognitydemo2\\app\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj": {}
+    "C:\\CICDDEMO\\appdemo\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj": {}
   },
   "projects": {
-    "C:\\ecognitydemo2\\app\\src\\HelloWorldApi\\HelloWorldApi.csproj": {
+    "C:\\CICDDEMO\\appdemo\\src\\HelloWorldApi\\HelloWorldApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ecognitydemo2\\app\\src\\HelloWorldApi\\HelloWorldApi.csproj",
+        "projectUniqueName": "C:\\CICDDEMO\\appdemo\\src\\HelloWorldApi\\HelloWorldApi.csproj",
         "projectName": "HelloWorldApi",
-        "projectPath": "C:\\ecognitydemo2\\app\\src\\HelloWorldApi\\HelloWorldApi.csproj",
+        "projectPath": "C:\\CICDDEMO\\appdemo\\src\\HelloWorldApi\\HelloWorldApi.csproj",
         "packagesPath": "C:\\Users\\Developer1\\.nuget\\packages\\",
-        "outputPath": "C:\\ecognitydemo2\\app\\src\\HelloWorldApi\\obj\\",
+        "outputPath": "C:\\CICDDEMO\\appdemo\\src\\HelloWorldApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -77,14 +77,14 @@
         }
       }
     },
-    "C:\\ecognitydemo2\\app\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj": {
+    "C:\\CICDDEMO\\appdemo\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ecognitydemo2\\app\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj",
+        "projectUniqueName": "C:\\CICDDEMO\\appdemo\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj",
         "projectName": "HelloWorldApi.Tests",
-        "projectPath": "C:\\ecognitydemo2\\app\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj",
+        "projectPath": "C:\\CICDDEMO\\appdemo\\tests\\HelloWorldApi.Tests\\HelloWorldApi.Tests.csproj",
         "packagesPath": "C:\\Users\\Developer1\\.nuget\\packages\\",
-        "outputPath": "C:\\ecognitydemo2\\app\\tests\\HelloWorldApi.Tests\\obj\\",
+        "outputPath": "C:\\CICDDEMO\\appdemo\\tests\\HelloWorldApi.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -106,8 +106,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\ecognitydemo2\\app\\src\\HelloWorldApi\\HelloWorldApi.csproj": {
-                "projectPath": "C:\\ecognitydemo2\\app\\src\\HelloWorldApi\\HelloWorldApi.csproj"
+              "C:\\CICDDEMO\\appdemo\\src\\HelloWorldApi\\HelloWorldApi.csproj": {
+                "projectPath": "C:\\CICDDEMO\\appdemo\\src\\HelloWorldApi\\HelloWorldApi.csproj"
               }
             }
           }

@@ -44,6 +44,39 @@
 // }
 
 
+// var builder = WebApplication.CreateBuilder(args);
+
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
+
+// var app = builder.Build();
+
+// app.MapGet("/", () => Results.Ok(new
+// {
+//     message = "Hello World from Azure App Service!",
+//     timestampUtc = DateTime.UtcNow
+// }));
+
+// app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+
+// // Demonstrate config/secret injection (from App Settings / Key Vault reference)
+// app.MapGet("/secret-demo", (IConfiguration config) =>
+// {
+//     var secretValue = config["DEMO_SECRET"] ?? "(not set)";
+//     return Results.Ok(new { demoSecret = secretValue });
+// });
+
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+// app.Run();
+
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -51,6 +84,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// -----------------------------
+// NORMAL ENDPOINTS
+// -----------------------------
 app.MapGet("/", () => Results.Ok(new
 {
     message = "Hello World from Azure App Service!",
@@ -59,13 +95,42 @@ app.MapGet("/", () => Results.Ok(new
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
-// Demonstrate config/secret injection (from App Settings / Key Vault reference)
+// -----------------------------
+// SECRET EXPOSURE (DEMO)
+// -----------------------------
 app.MapGet("/secret-demo", (IConfiguration config) =>
 {
-    var secretValue = config["DEMO_SECRET"] ?? "(not set)";
-    return Results.Ok(new { demoSecret = secretValue });
+    // ❌ Hardcoded secret (for demo)
+    var apiKey = "sk_test_1234567890";
+
+    return Results.Ok(new
+    {
+        configSecret = config["DEMO_SECRET"],
+        hardcodedSecret = apiKey
+    });
 });
 
+// -----------------------------
+// COMMAND INJECTION (DEMO)
+// -----------------------------
+app.MapGet("/run", ([FromQuery] string cmd) =>
+{
+    // ❌ Command Injection vulnerability
+    var process = Process.Start("cmd.exe", "/c " + cmd);
+    return Results.Ok("Command executed");
+});
+
+// -----------------------------
+// INSECURE DESERIALIZATION (DEMO)
+// -----------------------------
+app.MapPost("/deserialize", ([FromBody] string payload) =>
+{
+    // ❌ Insecure deserialization
+    var obj = System.Text.Json.JsonSerializer.Deserialize<object>(payload);
+    return Results.Ok(obj);
+});
+
+// -----------------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -73,3 +138,4 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
+
