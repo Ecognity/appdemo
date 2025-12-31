@@ -1,6 +1,5 @@
 # appdemo
-#secret added
 
-client_secret = F_N8Q~CEQaV36CevsoVx_kr6GJixLGzHsX6EHbOb
+client_secret = "<YOUR_CLIENT_SECRET>"  <!-- Set via a secure environment variable (e.g., CLIENT_SECRET). Do not commit real secrets. -->
 
 
