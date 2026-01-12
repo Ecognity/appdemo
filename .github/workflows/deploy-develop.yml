@@ -179,7 +179,7 @@ jobs:
     needs: build-and-test
     environment:
       name: dev
-      url: https://${{ secrets.AZURE_WEBAPP_NAME_DEV }}.azurewebsites.net
+      url: https://${{ secrets.WEBAPP_NAME_DEV }}.azurewebsites.net
 
     steps:
     - name: Download Artifact
@@ -198,7 +198,7 @@ jobs:
     - name: Deploy to Azure Web App (DEV)
       uses: azure/webapps-deploy@v3
       with:
-        app-name: ${{ secrets.AZURE_WEBAPP_NAME_DEV }}
+        app-name: ${{ secrets.WEBAPP_NAME_DEV }}
         package: ./publish
 
   # --------------------------------------------------
@@ -210,7 +210,7 @@ jobs:
     needs: deploy-dev
     environment:
       name: test
-      url: https://${{ secrets.AZURE_WEBAPP_NAME_TEST }}.azurewebsites.net
+      url: https://${{ secrets.WEBAPP_NAME_TEST }}.azurewebsites.net
 
     steps:
     - name: Download Artifact
@@ -229,5 +229,5 @@ jobs:
     - name: Deploy to Azure Web App (TEST)
       uses: azure/webapps-deploy@v3
       with:
-        app-name: ${{ secrets.AZURE_WEBAPP_NAME_TEST }}
+        app-name: ${{ secrets.WEBAPP_NAME_TEST }}
         package: ./publish
