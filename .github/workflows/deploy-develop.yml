@@ -274,9 +274,20 @@ jobs:
     # -------------------------------
     # Integration Tests
     # -------------------------------
+    - name: Checkout code for Integration Tests
+      uses: actions/checkout@v4
+
+    - name: Setup .NET for Integration Tests
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore Integration Tests
+      run: dotnet restore tests/HelloWorldApi.IntegrationTests/HelloWorldApi.IntegrationTests.csproj
+
     - name: Run Integration Tests
       run: |
-        dotnet test tests/HelloWorldApi.IntegrationTests \
+        dotnet test tests/HelloWorldApi.IntegrationTests/HelloWorldApi.IntegrationTests.csproj \
           --configuration Release \
           --logger "trx" \
           --results-directory IntegrationTestResults
