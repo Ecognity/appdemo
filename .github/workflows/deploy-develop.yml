@@ -305,28 +305,20 @@ jobs:
     # -------------------------------
     # DAST Security Testing
     # -------------------------------
-    # - name: Create ZAP working directory
-    #   run: |
-    #     mkdir -p ${{ github.workspace }}/zap-reports
-    #     chmod 777 ${{ github.workspace }}/zap-reports
+    - name: Run OWASP ZAP Baseline Scan
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/zap/wrk:rw \
+          ghcr.io/zaproxy/zaproxy:stable \
+          zap-baseline.py \
+          -t https://${{ vars.WEBAPP_NAME_DEV }}.azurewebsites.net \
+          -r zap-report.html \
+          -J zap-report.json \
+          -w zap-report.md \
+          -a || true
 
-    # - name: OWASP ZAP Baseline Scan
-    #   uses: zaproxy/action-baseline@v0.10.0
-    #   with:
-    #     target: https://${{ vars.WEBAPP_NAME_DEV }}.azurewebsites.net
-    #     cmd_options: "-a"
-    #     fail_action: false
-    #     artifact_name: zap-scan  # Disable automatic artifact upload
-
-    - name: OWASP ZAP Baseline Scan
-      uses: zaproxy/action-baseline@v0.10.0
-      with:
-        target: https://${{ vars.WEBAPP_NAME_DEV }}.azurewebsites.net
-        cmd_options: "-a"
-        fail_action: false
-        issue_title: false
-        allow_issue_writing: false
-        token: ""
+    - name: Fix ZAP Report Permissions
+      run: sudo chmod -R 777 ${{ github.workspace }}/zap-report* || true
 
 
     # -------------------------------
@@ -334,25 +326,29 @@ jobs:
     # -------------------------------
     - name: Enforce DAST Thresholds
       run: |
-        if grep -q "High" report_html.html || grep -q "Critical" report_html.html; then
-          echo "❌ High or Critical vulnerabilities detected"
-          exit 1
+        if [ -f zap-report.html ]; then
+          if grep -q "High" zap-report.html || grep -q "Critical" zap-report.html; then
+            echo "❌ High or Critical vulnerabilities detected"
+            exit 1
+          fi
+          echo "✅ DAST security thresholds passed"
+        else
+          echo "⚠️ ZAP report not found, skipping threshold check"
         fi
-        echo "✅ DAST security thresholds passed"
 
 
     # -------------------------------
     # Collect Results
     # -------------------------------
-    - name: Upload ZAP Report
+    - name: Upload ZAP Reports
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: zap-scan-results
+        name: zap-security-reports
         path: |
-          report_html.html
-          report_md.md
-          report_json.json
+          zap-report.html
+          zap-report.json
+          zap-report.md
         if-no-files-found: warn
 
     - name: Upload Deployment & Security Results
