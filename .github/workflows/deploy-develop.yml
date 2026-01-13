@@ -305,10 +305,16 @@ jobs:
     # -------------------------------
     # DAST Security Testing
     # -------------------------------
+    - name: Create ZAP workspace
+      run: |
+        mkdir -p ${{ github.workspace }}/zap-reports
+        chmod 777 ${{ github.workspace }}/zap-reports
+
     - name: Run OWASP ZAP Baseline Scan
       run: |
         docker run --rm \
-          -v ${{ github.workspace }}:/zap/wrk:rw \
+          -v ${{ github.workspace }}/zap-reports:/zap/wrk:rw \
+          -u root \
           ghcr.io/zaproxy/zaproxy:stable \
           zap-baseline.py \
           -t https://${{ vars.WEBAPP_NAME_DEV }}.azurewebsites.net \
@@ -317,8 +323,11 @@ jobs:
           -w zap-report.md \
           -a || true
 
-    - name: Fix ZAP Report Permissions
-      run: sudo chmod -R 777 ${{ github.workspace }}/zap-report* || true
+    - name: Copy ZAP Reports to workspace
+      run: |
+        if [ -d "${{ github.workspace }}/zap-reports" ]; then
+          cp -f ${{ github.workspace }}/zap-reports/zap-report.* ${{ github.workspace }}/ || true
+        fi
 
 
     # -------------------------------
@@ -346,9 +355,9 @@ jobs:
       with:
         name: zap-security-reports
         path: |
-          zap-report.html
-          zap-report.json
-          zap-report.md
+          ${{ github.workspace }}/zap-report.html
+          ${{ github.workspace }}/zap-report.json
+          ${{ github.workspace }}/zap-report.md
         if-no-files-found: warn
 
     - name: Upload Deployment & Security Results
