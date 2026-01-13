@@ -338,7 +338,7 @@ jobs:
           exit 1
         fi
         echo "✅ DAST security thresholds passed"
-        
+
 
     # -------------------------------
     # Collect Results
@@ -349,10 +349,10 @@ jobs:
       with:
         name: zap-scan-results
         path: |
-          zap-report.html
-          report_*.html
-          report_*.md
-          report_*.json
+          report_html.html
+          report_md.md
+          report_json.json
+        if-no-files-found: warn
 
     - name: Upload Deployment & Security Results
       if: always()
@@ -362,6 +362,7 @@ jobs:
         path: |
           TestResults/**
           IntegrationTestResults/**
+        if-no-files-found: warn
 
 # ==================================================
 # DEPLOY TO TEST (PROMOTION GATE)
