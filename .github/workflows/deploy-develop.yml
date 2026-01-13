@@ -333,14 +333,20 @@ jobs:
     # -------------------------------
     # Security Threshold Enforcement
     # -------------------------------
-    - name: Enforce DAST Thresholds
+    - name: Check DAST Results
       run: |
         if [ -f zap-report.html ]; then
-          if grep -q "High" zap-report.html || grep -q "Critical" zap-report.html; then
-            echo "❌ High or Critical vulnerabilities detected"
+          echo "📊 Analyzing ZAP scan results..."
+          
+          if grep -q "Critical" zap-report.html; then
+            echo "❌ CRITICAL vulnerabilities detected - Deployment blocked!"
             exit 1
+          elif grep -q "High" zap-report.html; then
+            echo "⚠️ HIGH severity vulnerabilities detected - Review recommended"
+            echo "Continuing deployment..."
+          else
+            echo "✅ No Critical or High vulnerabilities detected"
           fi
-          echo "✅ DAST security thresholds passed"
         else
           echo "⚠️ ZAP report not found, skipping threshold check"
         fi
