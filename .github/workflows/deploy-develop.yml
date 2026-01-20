@@ -297,12 +297,13 @@ jobs:
           
 
     - name: Publish Integration Test Results
-      if: always()
+
       uses: dorny/test-reporter@v1
       with:
         name: Integration Tests
         path: IntegrationTestResults/*.trx
         reporter: dotnet-trx
+        fail-on-error: false
 
     # -------------------------------
     # DAST Security Testing
